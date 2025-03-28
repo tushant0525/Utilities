@@ -20,6 +20,7 @@ public class MinMaxExample : MonoBehaviour
 {
     [MinMaxSlider(0f, 100f)] public Vector2 range = new Vector2(10f, 50f); // Default values
 
+    [MinMaxSlider(0f, 100f)]
     public MinMaxFloat minMaxFloat = new MinMaxFloat(0f, 100f);
 
     //  [Range(0f,100f)]

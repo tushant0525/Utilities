@@ -47,6 +47,39 @@ public class MinMaxSliderDrawer : PropertyDrawer
                 property.vector2Value = vector;
             }
         }
+        else if (property.type=="MinMaxFloat")
+        {
+            // Get the property for min and max values (these will be floats)
+            SerializedProperty minProp = property.FindPropertyRelative("min");
+            SerializedProperty maxProp = property.FindPropertyRelative("max");
+            EditorGUI.BeginChangeCheck();
+
+            // Get the current values of the min and max from the Vector2 property
+            Vector2 vector = new Vector2(minProp.floatValue, maxProp.floatValue);
+            float minVal = vector.x;
+            float maxVal = vector.y;
+
+            // Display editable min and max fields
+            minVal = EditorGUI.FloatField(splittedRect[0], minVal);
+            maxVal = EditorGUI.FloatField(splittedRect[2], maxVal);
+
+            // Display the MinMaxSlider in the middle section
+            EditorGUI.MinMaxSlider(splittedRect[1], ref minVal, ref maxVal, minMaxAttribute.min, minMaxAttribute.max);
+
+            // Clamping min/max values within the provided range
+            minVal = Mathf.Clamp(minVal, minMaxAttribute.min, maxVal);
+            maxVal = Mathf.Clamp(maxVal, minVal, minMaxAttribute.max);
+
+            vector = new Vector2(minVal, maxVal);
+
+            // If values changed, update the property
+            if (EditorGUI.EndChangeCheck())
+            {
+                minProp.floatValue = vector.x;
+                maxProp.floatValue = vector.y;
+            }
+            
+        }
         else
         {
             EditorGUI.LabelField(position, label.text, "Use MinMaxSlider with Vector2.");
